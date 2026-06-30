@@ -1,0 +1,6 @@
+**/bin/
+**/obj/
+*.bat
+*.dll
+*.so
+/test/
