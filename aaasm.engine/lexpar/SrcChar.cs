@@ -1,12 +1,12 @@
 using System;
 using aaasm.engine.io;
 
-namespace aaasm.engine.data
+namespace aaasm.engine.lexpar
 {
     /// <summary>Represents a character from a source file</summary>
     /// <param name="char">Actual character</param>
-    /// <param name="plc">Path, line, and column information</param>
-    public readonly struct SrcStrChar(char @char, SrcStrPLC plc)
+    /// <param name="origin">Information regarding the character's original source</param>
+    public readonly struct SrcChar(char @char, RefPnt origin)
     {
         #region object
 
@@ -19,7 +19,7 @@ namespace aaasm.engine.data
         #region fields
 
         private readonly char f_Char = @char;
-        private readonly SrcStrPLC f_PLC = plc;
+        private readonly RefPnt f_Origin = origin;
 
         #endregion
 
@@ -28,8 +28,8 @@ namespace aaasm.engine.data
         /// <summary>Actual character</summary>
         public char Char => f_Char;
 
-        /// <summary>Path, line, and column information</summary>
-        public SrcStrPLC PLC => f_PLC;
+        /// <summary>Information regarding the character's original source</summary>
+        public RefPnt Origin => f_Origin;
 
         #endregion
     }

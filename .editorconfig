@@ -12,3 +12,6 @@ dotnet_diagnostic.CS0649.severity = none
 
 # IDE0270: Use coalesce expression
 dotnet_diagnostic.IDE0270.severity = none
+
+# SYSLIB1045: Convert to 'GeneratedRegexAttribute'.
+dotnet_diagnostic.SYSLIB1045.severity = none

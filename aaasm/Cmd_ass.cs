@@ -1,10 +1,9 @@
 using System;
-using System.Linq;
 using cmdaxe;
-using aaasm.engine.cmd;
-using aaasm.engine.data;
+using aaasm.cmd;
 using aaasm.engine.io;
-using System.Text;
+using aaasm.engine.lexpar;
+using aaasm.engine.help;
 
 namespace aaasm
 {
@@ -22,28 +21,30 @@ namespace aaasm
         [Required(
             name: "src", 
             desc: "Source file (*.asm)")]
-        string src;
+        NormalPath? src;
 
         [OptionWArg(
             name: "out", 
             shortcut: 'o', 
             desc: $"Output file (*{Const.EXT_OUTPUT}); default is {DEFAULT_OUT}",
             argType: "path")]
-        string @out;
+        NormalPath? @out;
 
+        /*
         [OptionWArg(
             name: "Def", 
             shortcut: 'D', 
             desc: "Macro definition (parameters not supported)",
             argType: "name[=value]")]
-        string[] defs;
+        UserMacro[]? defs;
+        */
 
         [OptionWArg(
             name: "Include", 
             shortcut: 'I', 
             desc: "Search directory (used to locate included files)",
             argType: "directory")]
-        string[] includes;
+        NormalPath[]? includes;
 
         #endregion
 
@@ -51,34 +52,24 @@ namespace aaasm
 
         public override void Main()
         {
-            SrcStr[] srcLines;
-            using (var s = CmdUtil.FileOpenRead(src))
-                srcLines = DataUtil.ReadSource(s);
-            using (var s = CmdUtil.FileOpenWrite("test.txt"))
-                StreamUtil.WriteAllLines(s, Encoding.ASCII, from srcLine in srcLines select srcLine.Raw);
-            
-            
-            foreach (var line in srcLines)
+            try
             {
-                if (line.Length > 0)
-                {
-                    Console.WriteLine($"Line {line[0].PLC.Line:000} {line} {line[^1].PLC.Col}");
-                }
-                else
-                {
-                    Console.WriteLine();
-                }
+                // Open source file
+                SrcString source;
+                using (var f = CmdUtil.FileOpenRead(src!))
+                    source = new (StreamUtil.ReadAllText(f), src);
+                // Stage-0
+                var lex0 = Lex0.Run(source);
             }
-            
-
-
-            FileMagic4 f = new ("6502");
-            Console.WriteLine($"{(int)f:X8}");
-            
-            
-                
-
-            Console.WriteLine("Hello world!");
+            catch (BadSrcException e)
+            {
+                bool noOrigin = (!e.RefPnt.HasValue) || e.RefPnt.Value.Path is null;
+                string origin = noOrigin ? "" : (
+                    $"\"{e.RefPnt!.Value.Path}\"\n"+
+                    $"Line:  {e.RefPnt!.Value.Line}\n"+
+                    $"Col:   {e.RefPnt!.Value.Col}\n");
+                throw new CommandException($"{origin}{e.Message}");
+            }
         }
 
         #endregion

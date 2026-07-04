@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="aaasm.engine/aaasm.engine.csproj" />
   <Project Path="aaasm/aaasm.csproj" />
 </Solution>

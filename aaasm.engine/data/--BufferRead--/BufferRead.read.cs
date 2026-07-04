@@ -15,6 +15,7 @@ namespace aaasm.engine.data
         #region helper methods
 
         private bool MM_TryRead<T>(int size, ReadFunc<T> binRead, out T result)
+            where T: notnull
         {
             int end = f_Position + size;
             if (end <= f_Data.Length)
@@ -25,7 +26,7 @@ namespace aaasm.engine.data
             }
             else
             {
-                result = default;
+                result = default!;
                 return false;
             }
         }

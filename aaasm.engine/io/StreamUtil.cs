@@ -22,7 +22,7 @@ namespace aaasm.engine.io
         /// </exception>
         public static void ThrowIfCantRead(
             Stream argument, 
-            [CallerArgumentExpression(nameof(argument))] string paramName = null)
+            [CallerArgumentExpression(nameof(argument))] string? paramName = null)
         {
             try { if (argument.CanRead) return; }
             catch when (argument is null) { throw new ArgumentNullException(paramName); }
@@ -40,7 +40,7 @@ namespace aaasm.engine.io
         /// </exception>
         public static void ThrowIfCantWrite(
             Stream argument, 
-            [CallerArgumentExpression(nameof(argument))] string paramName = null)
+            [CallerArgumentExpression(nameof(argument))] string? paramName = null)
         {
             try { if (argument.CanWrite) return; }
             catch when (argument is null) { throw new ArgumentNullException(paramName); }
@@ -58,7 +58,7 @@ namespace aaasm.engine.io
         /// </exception>
         public static void ThrowIfCantSeek(
             Stream argument, 
-            [CallerArgumentExpression(nameof(argument))] string paramName = null)
+            [CallerArgumentExpression(nameof(argument))] string? paramName = null)
         {
             try { if (argument.CanSeek) return; }
             catch when (argument is null) { throw new ArgumentNullException(paramName); }
@@ -70,13 +70,13 @@ namespace aaasm.engine.io
         #region ReadAllLines/WriteAllLines
 
         private static string[] MM_ReadAllLines(Stream stream,
-            bool defEncoding, Encoding encoding)
+            bool defEncoding, Encoding? encoding)
         {
             IEnumerable<string> read()
             {
                 stream.Position = 0;
                 using var r = defEncoding ?
-                    new StreamReader(stream, encoding) :
+                    new StreamReader(stream, encoding!) :
                     new StreamReader(stream);
                 while (!r.EndOfStream) yield return new (r.ReadLine());
             }
@@ -88,8 +88,8 @@ namespace aaasm.engine.io
             catch (IOException e) { throw e; }
         }
 
-        private static void MM_WriteAllLines(Stream stream, IEnumerable<string> lines,
-            bool defEncoding, Encoding encoding)
+        private static void MM_WriteAllLines(Stream stream, IEnumerable<string>? lines,
+            bool defEncoding, Encoding? encoding)
         {
             ThrowIfCantWrite(stream);
             ThrowIfCantSeek(stream);
@@ -98,7 +98,7 @@ namespace aaasm.engine.io
             {
                 stream.Position = 0;
                 using var w = defEncoding ? 
-                    new StreamWriter(stream, encoding) : 
+                    new StreamWriter(stream, encoding!) : 
                     new StreamWriter(stream);
                 if (lines is not null)
                 {
@@ -111,7 +111,7 @@ namespace aaasm.engine.io
 
         /// <summary>Reads all lines from the specified stream</summary>
         /// <param name="stream">Stream read from</param>
-        /// <returns>Lines of source data</returns>
+        /// <returns>Lines of text</returns>
         /// <exception cref="ArgumentNullException">
         ///     <paramref name="stream"/> is null
         /// </exception>
@@ -132,7 +132,7 @@ namespace aaasm.engine.io
         /// <summary>Reads all lines from the specified stream</summary>
         /// <param name="stream">Stream read from</param>
         /// <param name="encoding">Encoding</param>
-        /// <returns>Lines of source data</returns>
+        /// <returns>Lines of text</returns>
         /// <exception cref="ArgumentNullException">
         ///     <paramref name="stream"/> is null
         ///     <br/>or<br/>
@@ -154,7 +154,7 @@ namespace aaasm.engine.io
 
         /// <summary>Writes all lines to the specified stream</summary>
         /// <param name="stream">Stream write to</param>
-        /// <param name="lines">Lines of source data</param>
+        /// <param name="lines">Lines of text</param>
         /// <exception cref="ArgumentNullException">
         ///     <paramref name="stream"/> is null
         /// </exception>
@@ -166,13 +166,13 @@ namespace aaasm.engine.io
         /// <exception cref="IOException">
         ///     An I/O error occurred.
         /// </exception>
-        public static void WriteAllLines(Stream stream, IEnumerable<string> lines) =>
+        public static void WriteAllLines(Stream stream, IEnumerable<string>? lines) =>
             MM_WriteAllLines(stream, lines, false, null);
 
         /// <summary>Writes all lines to the specified stream</summary>
         /// <param name="stream">Stream write to</param>
         /// <param name="encoding">Encoding</param>
-        /// <param name="lines">Lines of source data</param>
+        /// <param name="lines">Lines of text</param>
         /// <exception cref="ArgumentNullException">
         ///     <paramref name="stream"/> is null
         ///     <br/>or<br/>
@@ -186,8 +186,127 @@ namespace aaasm.engine.io
         /// <exception cref="IOException">
         ///     An I/O error occurred.
         /// </exception>
-        public static void WriteAllLines(Stream stream, Encoding encoding, IEnumerable<string> lines) =>
+        public static void WriteAllLines(Stream stream, Encoding encoding, IEnumerable<string>? lines) =>
             MM_WriteAllLines(stream, lines, true, encoding);
+
+        #endregion
+        
+        #region ReadAllText/WriteAllText
+
+        private static string MM_ReadAllText(Stream stream,
+            bool defEncoding, Encoding? encoding)
+        {
+            ThrowIfCantRead(stream);
+            ThrowIfCantSeek(stream);
+            if (defEncoding) ArgumentNullException.ThrowIfNull(encoding);
+            try
+            {
+                stream.Position = 0;
+                using var r = defEncoding ?
+                    new StreamReader(stream, encoding!) :
+                    new StreamReader(stream);
+                return r.ReadToEnd();
+            }
+            catch (OutOfMemoryException e) { throw e; }
+            catch (IOException e) { throw e; }
+        }
+
+        private static void MM_WriteAllText(Stream stream, string? text,
+            bool defEncoding, Encoding? encoding)
+        {
+            ThrowIfCantWrite(stream);
+            ThrowIfCantSeek(stream);
+            if (defEncoding) ArgumentNullException.ThrowIfNull(encoding);
+            try
+            {
+                stream.Position = 0;
+                using var w = defEncoding ? 
+                    new StreamWriter(stream, encoding!) : 
+                    new StreamWriter(stream);
+                if (text is not null) w.Write(text);
+            }
+            catch (IOException e) { throw e; }
+        }
+
+        /// <summary>Reads all text from the specified stream</summary>
+        /// <param name="stream">Stream read from</param>
+        /// <returns>Text</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="stream"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="stream"/> does not support reading
+        ///     <br/>or<br/>
+        ///     <paramref name="stream"/> does not support seeking
+        /// </exception>
+        /// <exception cref="OutOfMemoryException">
+        ///     Insufficient memory
+        /// </exception>
+        /// <exception cref="IOException">
+        ///     An I/O error occurred.
+        /// </exception>
+        public static string ReadAllText(Stream stream) =>
+            MM_ReadAllText(stream, false, null);
+
+        /// <summary>Reads all text from the specified stream</summary>
+        /// <param name="stream">Stream read from</param>
+        /// <param name="encoding">Encoding</param>
+        /// <returns>Text</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="stream"/> is null
+        ///     <br/>or<br/>
+        ///     <paramref name="encoding"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="stream"/> does not support reading
+        ///     <br/>or<br/>
+        ///     <paramref name="stream"/> does not support seeking
+        /// </exception>
+        /// <exception cref="OutOfMemoryException">
+        ///     Insufficient memory
+        /// </exception>
+        /// <exception cref="IOException">
+        ///     An I/O error occurred.
+        /// </exception>
+        public static string ReadAllText(Stream stream, Encoding encoding) =>
+            MM_ReadAllText(stream, true, encoding);
+
+        /// <summary>Writes all text to the specified stream</summary>
+        /// <param name="stream">Stream write to</param>
+        /// <param name="text">Source data</param>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="stream"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="stream"/> does not support writing
+        ///     <br/>or<br/>
+        ///     <paramref name="stream"/> does not support seeking
+        /// </exception>
+        /// <exception cref="IOException">
+        ///     An I/O error occurred.
+        /// </exception>
+        public static void WriteAllText(Stream stream, string? text) =>
+            MM_WriteAllText(stream, text, false, null);
+
+        /// <summary>Writes all text to the specified stream</summary>
+        /// <param name="stream">Stream write to</param>
+        /// <param name="encoding">Encoding</param>
+        /// <param name="text">Source data</param>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="stream"/> is null
+        ///     <br/>or<br/>
+        ///     <paramref name="encoding"/> is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="stream"/> does not support writing
+        ///     <br/>or<br/>
+        ///     <paramref name="stream"/> does not support seeking
+        /// </exception>
+        /// <exception cref="IOException">
+        ///     An I/O error occurred.
+        /// </exception>
+        public static void WriteAllText(Stream stream, Encoding encoding, string? text) =>
+            MM_WriteAllText(stream, text, true, encoding);
 
         #endregion
     }

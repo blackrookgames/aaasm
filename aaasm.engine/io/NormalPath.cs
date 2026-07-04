@@ -28,7 +28,7 @@ namespace aaasm.engine.io
         /// <exception cref="SecurityException">
         ///     Caller does not have the required permissions
         /// </exception>
-        public NormalPath(string path, NormalPath basePath = null)
+        public NormalPath(string path, NormalPath? basePath = null)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace aaasm.engine.io
         ///     True if <paramref name="obj"/> is a <see cref="NormalPath"/> 
         ///     and equal to the current <see cref="NormalPath"/>; false otherwise
         /// </returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is null) return false;
             if (obj is not NormalPath other) return false;
@@ -75,7 +75,7 @@ namespace aaasm.engine.io
         /// <summary>Checks if this <see cref="NormalPath"/> is equal to another <see cref="NormalPath"/></summary>
         /// <param name="other">Other <see cref="NormalPath"/></param>
         /// <returns>Whether or not this <see cref="NormalPath"/> is equal to <paramref name="other"/></returns>
-        public bool Equals(NormalPath other) => f_Path == other?.f_Path;
+        public bool Equals(NormalPath? other) => f_Path == other?.f_Path;
 
         #endregion
 
@@ -91,7 +91,7 @@ namespace aaasm.engine.io
         ///     <br/>=0 - This <see cref="NormalPath"/> appears in the same position in the sort order as <paramref name="other"/>
         ///     <br/>&gt;0 - This <see cref="NormalPath"/> follows <paramref name="other"/>
         /// </returns>
-        public int CompareTo(NormalPath other) => f_Path.CompareTo(other?.f_Path);
+        public int CompareTo(NormalPath? other) => f_Path.CompareTo(other?.f_Path);
 
         #endregion
 
@@ -126,10 +126,16 @@ namespace aaasm.engine.io
 
         #region operators
 
-        public static bool operator ==(NormalPath a, NormalPath b) => a?.f_Path == b?.f_Path;
-        public static bool operator !=(NormalPath a, NormalPath b) => a?.f_Path != b?.f_Path;
+        public static bool operator ==(NormalPath? a, NormalPath? b) => a?.f_Path == b?.f_Path;
+        public static bool operator !=(NormalPath? a, NormalPath? b) => a?.f_Path != b?.f_Path;
         
-        public static implicit operator string(NormalPath src) => src?.f_Path;
+        public static implicit operator string(NormalPath src)
+        {
+            try
+            { return src.f_Path; }
+            catch when (src is null)
+            { throw new ArgumentNullException(nameof(src)); }
+        }
 
         #endregion
 
