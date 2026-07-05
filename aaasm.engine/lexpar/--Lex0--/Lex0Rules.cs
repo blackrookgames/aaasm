@@ -4,28 +4,36 @@ using aaasm.engine.col;
 namespace aaasm.engine.lexpar
 {
     /// <summary>Represents rules for Stage-0 lexical analysis</summary>
-    public class Lex0Rules
+    public abstract class Lex0Rules
     {
-        #region const
-
-        private readonly static ImmutableNullessArray<Lex0CommentRules> COMMENTS = new(
-        [
-            Lex0CommentRules.ASSEMBLY,
-            Lex0CommentRules.C,
-        ]);
-
-        #endregion
-
         #region properties
 
         /// <summary>Whether or not single-quotation marks should be parsed as a quoted block</summary>
-        public virtual bool ParseSingleQuote => true;
+        public abstract bool ParseSingleQuote { get; }
 
         /// <summary>Whether or not double-quotation marks should be parsed as a quoted block</summary>
-        public virtual bool ParseDoubleQuote => true;
+        public abstract bool ParseDoubleQuote { get; }
 
         /// <summary>Rules regarding comments</summary>
-        public virtual ImmutableNullessArray<Lex0CommentRules> Comments => COMMENTS;
+        public abstract ImmutableNullessArray<Lex0CommentRules> Comments { get; }
+
+        /// <summary>
+        ///     Line-continuation identifier; 
+        ///     this must be the last character in the line
+        /// </summary>
+        public abstract string? LineContinue { get; }
+
+        /// <summary>
+        ///     <para>
+        ///         Symbols; these may include
+        ///         <list type="bullet">
+        ///             <item>Operators</item>
+        ///             <item>Delimiters</item>
+        ///             <item>Operator keywords</item>
+        ///         </list>
+        ///     </para>
+        /// </summary>
+        public abstract ImmutableNullessArray<string> Symbols { get; }
 
         #endregion
     }

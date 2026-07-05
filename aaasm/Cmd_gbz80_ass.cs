@@ -3,12 +3,12 @@ using cmdaxe;
 using aaasm.cmd;
 using aaasm.engine.io;
 using aaasm.engine.lexpar;
-using aaasm.engine.help;
+using gbz80 = aaasm.engine.lexpar.gbz80;
 
 namespace aaasm
 {
-    [Command(name: "ass", desc: "Runs the assembler")]
-    class Cmd_ass : Command
+    [Command(name: "ass", group: "gbz80", desc: "Runs the assembler")]
+    class Cmd_gbz80_ass : Command
     {
         #region const
 
@@ -59,7 +59,13 @@ namespace aaasm
                 using (var f = CmdUtil.FileOpenRead(src!))
                     source = new (StreamUtil.ReadAllText(f), src);
                 // Stage-0
-                var lex0 = Lex0.Run(source);
+                var lex0 = Lex0.Run(source, gbz80.Rules.LEX0);
+                foreach (var line in lex0.Lines)
+                {
+                    foreach (var t in line)
+                        Console.Write($"{{{t.RawData.Raw}}}");
+                    Console.WriteLine();
+                }
             }
             catch (BadSrcException e)
             {

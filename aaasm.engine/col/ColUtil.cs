@@ -40,5 +40,28 @@ namespace aaasm.engine.col
         }
 
         #endregion
+
+        #region ReverseLoop
+
+        /// <summary>Loop thru the list in reverse</summary>
+        /// <typeparam name="T">Item type</typeparam>
+        /// <param name="list">List to loop thru</param>
+        /// <returns>List items, starting with last item</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="list"/> is null
+        /// </exception>
+        public static IEnumerable<T?> ReverseLoop<T>(IReadOnlyList<T?> list)
+        {
+            // Initialize position
+            int pos;
+            try
+            { pos = list.Count; }
+            catch when (list is null)
+            { throw new ArgumentNullException(nameof(list)); }
+            // Loop thru
+            while (pos > 0) yield return list[--pos];
+        }
+
+        #endregion
     }
 }

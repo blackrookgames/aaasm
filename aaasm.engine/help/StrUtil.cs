@@ -72,6 +72,7 @@ namespace aaasm.engine.help
         /// <param name="s">String</param>
         /// <param name="substr">Substring</param>
         /// <param name="index">Index</param>
+        /// <param name="ignoreCase">Whether or not to ignore casing</param>
         /// <returns>
         ///     Whether or not there is an occurance of <paramref name="substr"/> 
         ///     at <paramref name="index"/>
@@ -82,7 +83,7 @@ namespace aaasm.engine.help
         /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="index"/> is out of range
         /// </exception>
-        public static bool SubstrAt(string s, string? substr, int index)
+        public static bool SubstrAt(string s, string? substr, int index, bool ignoreCase = false)
         {
             // Validate arguments
             try
@@ -96,8 +97,16 @@ namespace aaasm.engine.help
                 return false;
             for (int i = 0; i < substr.Length; ++i)
             {
-                if (s[index + i] != substr[i])
-                    return false;
+                var a = s[index + i];
+                var b = substr[i];
+                if (a == b) continue;
+                if (ignoreCase)
+                {
+                    int aa = (a < 'a' || a > 'z') ? a : (a - 0x20);
+                    int bb = (b < 'b' || b > 'z') ? b : (b - 0x20);
+                    if (aa == bb) continue;
+                }
+                return false;
             }
             return true;
         }
