@@ -1,0 +1,11 @@
+Order of Operations:
+ 1:   Function calls
+ 2:   Parentheses
+ 3:   Unary
+ 4:   Multiplication, division, modulus
+ 5:   Addition, subtraction
+ 6:   Bit-shift
+ 7:   Bitwise
+ 8:   Comparison
+ 9:   Equality
+10:   Boolean

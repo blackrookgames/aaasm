@@ -1,0 +1,4 @@
+For line-continuation to count, the line-continuation character must be the last character in the current line
+
+For a preprocessor command to be called, the call must be the first thing in the line
+

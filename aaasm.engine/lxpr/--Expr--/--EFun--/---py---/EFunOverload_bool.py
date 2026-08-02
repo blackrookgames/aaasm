@@ -1,0 +1,103 @@
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parent))
+
+from help import\
+    Outputter as _Outputter
+
+from EFunOverload import\
+    MAX_ARG_COUNT as _MAX_ARG_COUNT
+
+def create_class(o:_Outputter, num_args:int):
+    o.print("public class EFunBoolOverload", end = '')
+    if num_args > 0:
+        o.print('<', end = '')
+        for i in range(num_args):
+            if i > 0: o.print(", ", end = '')
+            o.print(f"TArg{i}", end = '')
+        o.print('>', end = '')
+    o.print(" : EFunBoolOverloadBase")
+    o.print("{")
+    o.indent_inc()
+    #region nested
+    o.print("#region nested")
+    o.print()
+    o.print("public delegate bool InvokeFunc(ExprContext context", end = '')
+    for i in range(num_args): o.print(f", TArg{i} arg{i}", end = '')
+    o.print(");")
+    o.print()
+    o.print("#endregion")
+    #endregion
+    o.print()
+    #region init
+    o.print("#region init")
+    o.print()
+    o.print("internal EFunBoolOverload(EFunFunctionId id, InvokeFunc invoke", end = '')
+    if num_args > 0: 
+        o.print(", ")
+        o.print("    ", end = '')
+        for i in range(num_args):
+            if i > 0: o.print(", ", end = '')
+            o.print(f"IEFunParam param{i}", end = '')
+    o.print(") : ")
+    o.print("    base(id, new([", end = '')
+    for i in range(num_args):
+        if i > 0: o.print(", ", end = '')
+        o.print(f"param{i}", end = '')
+    o.print("]))")
+    o.print("{")
+    o.print("    f_Invoke = invoke;")
+    o.print("}")
+    o.print()
+    o.print("#endregion")
+    #endregion
+    o.print()
+    #region fields
+    o.print("#region fields")
+    o.print()
+    o.print("private readonly InvokeFunc f_Invoke;")
+    o.print()
+    o.print("#endregion")
+    #endregion
+    o.print()
+    #region EFunBoolOverloadBase
+    o.print("#region EFunBoolOverloadBase")
+    o.print()
+    o.print("/// <inheritdoc/>")
+    o.print("private protected override bool MM_Invoke(ExprContext context, EValue[] input)")
+    o.print("{")
+    o.print("    MM_ValidateInputCount(input);")
+    o.print("    try")
+    o.print("    {")
+    o.print("        var fixedInput = MM_FixInput(input);")
+    o.print("        return f_Invoke(context", end = '')
+    for i in range(num_args):
+        o.print(f", (TArg{i})fixedInput[{i}]", end = '')
+    o.print(");")
+    o.print("    }")
+    o.print("    catch")
+    o.print("    {")
+    o.print("        MM_ThrowIfInputMismatch(input);")
+    o.print("        throw;")
+    o.print("    }")
+    o.print("    ")
+    o.print("}")
+    o.print()
+    o.print("#endregion")
+    #endregion
+    o.indent_dec()
+    o.print("}")
+
+def run():
+    global _MAX_ARG_COUNT
+    o = _Outputter()
+    o.print("using System;")
+    o.print()
+    o.print("namespace aaasm.engine.lxpr")
+    o.print("{")
+    o.indent_inc()
+    for num_args in range(_MAX_ARG_COUNT + 1):
+        if num_args > 0: o.print()
+        create_class(o, num_args)
+    o.indent_dec()
+    o.print("}")

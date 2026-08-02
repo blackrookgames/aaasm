@@ -1,9 +1,5 @@
 using System;
 using cmdaxe;
-using aaasm.cmd;
-using aaasm.engine.io;
-using aaasm.engine.lexpar;
-using mos6502 = aaasm.engine.lexpar.mos6502;
 
 namespace aaasm
 {

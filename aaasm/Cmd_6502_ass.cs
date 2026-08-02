@@ -2,8 +2,11 @@ using System;
 using cmdaxe;
 using aaasm.cmd;
 using aaasm.engine.io;
-using aaasm.engine.lexpar;
-using mos6502 = aaasm.engine.lexpar.mos6502;
+using aaasm.engine.lxpr;
+using System.IO;
+
+using mos6502 = aaasm.cpu.mos6502;
+using System.Collections.Generic;
 
 namespace aaasm
 {
@@ -30,17 +33,21 @@ namespace aaasm
             argType: "path")]
         NormalPath? @out;
 
-        /*
         [OptionWArg(
-            name: "Def", 
+            name: "out_lex",
+            desc: "If specified, lexically analyzed source code will be saved here",
+            argType: "path")]
+        NormalPath? out_lex;
+
+        [OptionWArg(
+            name: "def", 
             shortcut: 'D', 
             desc: "Macro definition (parameters not supported)",
             argType: "name[=value]")]
-        UserMacro[]? defs;
-        */
+        MacroDef[]? defs;
 
         [OptionWArg(
-            name: "Include", 
+            name: "include", 
             shortcut: 'I', 
             desc: "Search directory (used to locate included files)",
             argType: "directory")]
@@ -58,23 +65,56 @@ namespace aaasm
                 SrcString source;
                 using (var f = CmdUtil.FileOpenRead(src!))
                     source = new (StreamUtil.ReadAllText(f), src);
-                // Stage-0
-                var lex0 = Lex0.Run(source, mos6502.Rules.LEX0);
-                foreach (var line in lex0.Lines)
+                // Gather search directories
+                List<NormalPath> searchDirs = [CmdUtil.GetParentDir(src!)];
+                if (includes is not null) searchDirs.AddRange(includes);
+                // Setup lexicial analysis parameters
+                LexParams lexParams = new();
+                lexParams.Expression.SearchDirectories = new(searchDirs);
+                if (defs is not null) lexParams.MacroDefs = new(defs);
+                // Lexicial analysis
+                var lex = Lex.Run(source, mos6502.Rules.LEX, lexParams);
+                if (out_lex is not null)
                 {
-                    foreach (var t in line)
-                        Console.Write($"{{{t.RawData.Raw}}}");
-                    Console.WriteLine();
+                    using StringWriter w = new();
+                    void write(LexToken token)
+                    {
+                        if (token.Brackets is not null)
+                            w.Write($"{token.Brackets.Open} ");
+                        else
+                            w.Write($"{token.Rough.RawData.Raw} ");
+                        foreach (var child in token.Children)
+                            write(child);
+                        if (token.Brackets is not null)
+                            w.Write($"{token.Brackets.Close} ");
+                    }
+                    foreach (var line in lex.Lines)
+                    {
+                        foreach (var t in line) write(t);
+                        w.WriteLine();
+                    }
+                    CmdUtil.WriteAllText(out_lex, w.ToString());
                 }
             }
             catch (BadSrcException e)
             {
-                bool noOrigin = (!e.RefPnt.HasValue) || e.RefPnt.Value.Path is null;
-                string origin = noOrigin ? "" : (
-                    $"\"{e.RefPnt!.Value.Path}\"\n"+
-                    $"Line:  {e.RefPnt!.Value.Line}\n"+
-                    $"Col:   {e.RefPnt!.Value.Col}\n");
-                throw new CommandException($"{origin}{e.Message}");
+                using StringWriter w = new();
+                // Reference point
+                if (e.RefPnt.HasValue && e.RefPnt.Value.Path is not null)
+                {
+                    // Path
+                    w.WriteLine(e.RefPnt.Value.Path);
+                    // Line
+                    if (e.RefPnt.Value.Line > 0)
+                        w.WriteLine($"Line:  {e.RefPnt.Value.Line}");
+                    // Column
+                    if (e.RefPnt.Value.Col > 0)
+                        w.WriteLine($"Col:   {e.RefPnt.Value.Col}");
+                }
+                // Message
+                w.Write(e.Message);
+                // Final
+                throw new CommandException(w.ToString());
             }
         }
 

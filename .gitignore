@@ -1,5 +1,7 @@
+**/.venv/
 **/bin/
 **/obj/
+**/__pycache__/
 *.bat
 *.dll
 *.so

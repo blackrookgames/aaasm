@@ -110,7 +110,7 @@ namespace aaasm.engine.io
         }
 
         /// <summary>Reads all lines from the specified stream</summary>
-        /// <param name="stream">Stream read from</param>
+        /// <param name="stream">Stream to read from</param>
         /// <returns>Lines of text</returns>
         /// <exception cref="ArgumentNullException">
         ///     <paramref name="stream"/> is null
@@ -130,7 +130,7 @@ namespace aaasm.engine.io
             MM_ReadAllLines(stream, false, null);
 
         /// <summary>Reads all lines from the specified stream</summary>
-        /// <param name="stream">Stream read from</param>
+        /// <param name="stream">Stream to read from</param>
         /// <param name="encoding">Encoding</param>
         /// <returns>Lines of text</returns>
         /// <exception cref="ArgumentNullException">
@@ -153,7 +153,7 @@ namespace aaasm.engine.io
             MM_ReadAllLines(stream, true, encoding);
 
         /// <summary>Writes all lines to the specified stream</summary>
-        /// <param name="stream">Stream write to</param>
+        /// <param name="stream">Stream to write to</param>
         /// <param name="lines">Lines of text</param>
         /// <exception cref="ArgumentNullException">
         ///     <paramref name="stream"/> is null
@@ -170,7 +170,7 @@ namespace aaasm.engine.io
             MM_WriteAllLines(stream, lines, false, null);
 
         /// <summary>Writes all lines to the specified stream</summary>
-        /// <param name="stream">Stream write to</param>
+        /// <param name="stream">Stream to write to</param>
         /// <param name="encoding">Encoding</param>
         /// <param name="lines">Lines of text</param>
         /// <exception cref="ArgumentNullException">
@@ -229,7 +229,7 @@ namespace aaasm.engine.io
         }
 
         /// <summary>Reads all text from the specified stream</summary>
-        /// <param name="stream">Stream read from</param>
+        /// <param name="stream">Stream to read from</param>
         /// <returns>Text</returns>
         /// <exception cref="ArgumentNullException">
         ///     <paramref name="stream"/> is null
@@ -249,7 +249,7 @@ namespace aaasm.engine.io
             MM_ReadAllText(stream, false, null);
 
         /// <summary>Reads all text from the specified stream</summary>
-        /// <param name="stream">Stream read from</param>
+        /// <param name="stream">Stream to read from</param>
         /// <param name="encoding">Encoding</param>
         /// <returns>Text</returns>
         /// <exception cref="ArgumentNullException">
@@ -272,7 +272,7 @@ namespace aaasm.engine.io
             MM_ReadAllText(stream, true, encoding);
 
         /// <summary>Writes all text to the specified stream</summary>
-        /// <param name="stream">Stream write to</param>
+        /// <param name="stream">Stream to write to</param>
         /// <param name="text">Source data</param>
         /// <exception cref="ArgumentNullException">
         ///     <paramref name="stream"/> is null
@@ -289,7 +289,7 @@ namespace aaasm.engine.io
             MM_WriteAllText(stream, text, false, null);
 
         /// <summary>Writes all text to the specified stream</summary>
-        /// <param name="stream">Stream write to</param>
+        /// <param name="stream">Stream to write to</param>
         /// <param name="encoding">Encoding</param>
         /// <param name="text">Source data</param>
         /// <exception cref="ArgumentNullException">

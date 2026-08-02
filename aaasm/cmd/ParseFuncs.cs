@@ -1,23 +1,22 @@
 using System;
 using cmdaxe;
 using aaasm.engine.io;
+using aaasm.engine.lxpr;
 
 namespace aaasm.cmd
 {
     public static class ParseFuncs
     {
-        /*
-        [ParseFunc(typeof(UserMacro), "macro definition")]
-        public static bool ParseUserMacro(string input, out object? result)
+        [ParseFunc(typeof(MacroDef), "macro definition")]
+        public static bool ParseMacroDef(string input, out object? result)
         {
             var equals = input.IndexOf('=');
             if (equals >= 0)
-                result = new UserMacro(input[..equals], input[(equals + 1)..]);
+                result = new MacroDef(input[..equals], input[(equals + 1)..]);
             else
-                result = new UserMacro(input, null);
+                result = new MacroDef(input, null);
             return true;
         }
-        */
 
         [ParseFunc(typeof(NormalPath), "path")]
         public static bool ParseNormalPath(string input, out object? result)

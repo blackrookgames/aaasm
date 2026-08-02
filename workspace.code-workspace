@@ -11,6 +11,9 @@
 		},
 		"explorer.fileNesting.enabled": true,
 		"workbench.iconTheme": null,
-		"csharp.format.enable": true
+		"csharp.format.enable": true,
+		"python.analysis.extraPaths": [
+			"${workspaceFolder}/py/modules"
+		]
 	}
 }
