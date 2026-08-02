@@ -20,7 +20,7 @@ namespace aaasm.engine.lxpr
             {
                 Comments = init.Comments;
                 LineContinue = init.LineContinue;
-                RoughSymbols = init.RoughSymbols;
+                RoughPatterns = init.RoughPatterns;
                 PrePrefix = init.PrePrefix;
                 PreNames = init.PreNames;
                 PreCmdArgSep = init.PreCmdArgSep;
@@ -52,9 +52,8 @@ namespace aaasm.engine.lxpr
 
         /// <summary>
         ///     <para>
-        ///         Rough symbols to extracted during the rough tokenization phase. 
-        ///         If detected in source code, they will be extracted as tokens regardless 
-        ///         of whether or not they are surrounded by whitespace.
+        ///         Rough patterns to be detected during the rough tokenization phase. 
+        ///         Lower indexes have higher priority.
         ///     </para>
         ///     <para>
         ///         Examples:
@@ -64,11 +63,12 @@ namespace aaasm.engine.lxpr
         ///             <item>Equality operators == != &lt; &lt;= &gt; &gt;=</item>
         ///             <item>Boolean operators &amp;&amp; || !</item>
         ///             <item>Delimiters , ( ) { } [ ]</item>
+        ///             <item>Command prefixes</item>
         ///         </list>
         ///     </para>
         /// </summary>
         [InitParam(value: """ new() """)]
-        public ImmNullArray<Str> RoughSymbols { get; }
+        public ImmNullArray<LexRoughPattern> RoughPatterns { get; }
 
         /// <summary>Prefix for preprocessor commands</summary>
         [InitParam(value: """ (CIStr)"@" """)]

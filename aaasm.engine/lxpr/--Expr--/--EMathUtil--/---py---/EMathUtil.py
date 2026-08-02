@@ -50,7 +50,7 @@ def run(type_sffx:str, override_neg:None|str = None):
         fullexpr = f"new E{type.suffix}({_convert(mathtype, type, tempexpr)})"
         # region start
         o.print(f"#region {desc}")
-        o.print(f"")
+        o.print()
         # header
         o.print(f"/// <summary>{desc}</summary>")
         o.print(f"/// <param name=\"input\">Input</param>")
@@ -70,9 +70,9 @@ def run(type_sffx:str, override_neg:None|str = None):
         o.indent_dec()
         o.print(f"}}")
         # region end
-        o.print(f"")
+        o.print()
         o.print(f"#endregion")
-    def _binary(suffix:str, desc:str, template:str, no_float:bool = False, div:bool = False, shift:bool = False):
+    def _binary(suffix:str, desc:str, template:str, no_float:bool = False, div:bool = False):
         nonlocal INDENT, o, type
         def __template(value_a:str, value_b:str):
             nonlocal template
@@ -116,7 +116,7 @@ def run(type_sffx:str, override_neg:None|str = None):
             # body main
             tempexpr = __template("aa", "bb")
             o.print(f"var aa = a.{mathtype.cstype_method}();")
-            o.print(f"var bb = b.{"ToShift" if shift else f"{mathtype.cstype_method}"}();")
+            o.print(f"var bb = b.{mathtype.cstype_method}();")
             if div: o.print(f"if (bb == 0) throw new EValueException(\"Division by zero\");")
             o.print(f"return new E{dominant.suffix}({_convert(mathtype, dominant, tempexpr)});")
             # body close
@@ -124,28 +124,65 @@ def run(type_sffx:str, override_neg:None|str = None):
             o.indent_dec()
             o.print(f"}}")
         o.print(f"#region {desc}")
-        o.print(f"")
+        o.print()
         __create(_get_type('U8'))
-        o.print(f"")
+        o.print()
         __create(_get_type('I8'))
-        o.print(f"")
+        o.print()
         __create(_get_type('U16'))
-        o.print(f"")
+        o.print()
         __create(_get_type('I16'))
-        o.print(f"")
+        o.print()
         __create(_get_type('U32'))
-        o.print(f"")
+        o.print()
         __create(_get_type('I32'))
-        o.print(f"")
+        o.print()
         __create(_get_type('U64'))
-        o.print(f"")
+        o.print()
         __create(_get_type('I64'))
         if not no_float:
-            o.print(f"")
+            o.print()
             __create(_get_type('F32'))
-            o.print(f"")
+            o.print()
             __create(_get_type('F64'))
-        o.print(f"")
+        o.print()
+        o.print(f"#endregion")
+    def _shift(suffix:str, desc:str, template:str, unsigned:bool = False):
+        nonlocal INDENT, o, type
+        def __template(value_a:str, value_b:str):
+            nonlocal template
+            TEMP_VALUE_A = "<VALUE_A>"
+            TEMP_VALUE_B = "<VALUE_B>"
+            return template.replace(TEMP_VALUE_A, value_a).replace(TEMP_VALUE_B, value_b)
+        mathtype = _get_type(type.mathtype)
+        o.print(f"#region {desc}")
+        o.print()
+        # header
+        o.print(f"/// <summary>{desc}</summary>")
+        o.print(f"/// <param name=\"input\">Input</param>")
+        o.print(f"/// <param name=\"amount\">Shift amount</param>")
+        o.print(f"/// <returns>Result</returns>")
+        o.print(f"/// <exception cref=\"ArgumentNullException\">")
+        o.print(f"///     <paramref name=\"input\"/> is null")
+        o.print(f"///     <br/>or<br/>")
+        o.print(f"///     <paramref name=\"amount\"/> is null")
+        o.print(f"/// </exception>")
+        # body open
+        o.print(f"{MODTYPE} {suffix}(E{type.suffix} input, IEInteger amount)")
+        o.print(f"{{")
+        o.indent_inc()
+        try_open(o)
+        # body main
+        mask = "" if ((not unsigned) or type.kind != _TypeKind.SIGNED or mathtype.numbytes == type.numbytes)\
+            else f" & 0x{'FF' * type.numbytes}"
+        o.print(f"var _input = input.{mathtype.cstype_method}(){mask};")
+        o.print(f"var _amount = amount.ToShift();")
+        o.print(f"return new E{type.suffix}({_convert(mathtype, type, __template("_input", "_amount"))});")
+        # body close
+        try_close(o, nullparams = [ "input", "amount" ])
+        o.indent_dec()
+        o.print(f"}}")
+        o.print()
         o.print(f"#endregion")
     def _negation(suffix:str, desc:str, template:str, override:None|str = None):
         nonlocal INDENT, o, type
@@ -159,7 +196,7 @@ def run(type_sffx:str, override_neg:None|str = None):
             f"new E{rettype.suffix}({_convert(mathtype, rettype, tempexpr)})"
         # region start
         o.print(f"#region {desc}")
-        o.print(f"")
+        o.print()
         # header
         o.print(f"/// <summary>{desc}</summary>")
         o.print(f"/// <param name=\"input\">Input</param>")
@@ -179,7 +216,7 @@ def run(type_sffx:str, override_neg:None|str = None):
         o.indent_dec()
         o.print(f"}}")
         # region end
-        o.print(f"")
+        o.print()
         o.print(f"#endregion")
     def _bytelh(suffix:str, desc:str, template:str):
         nonlocal INDENT, o, type
@@ -192,7 +229,7 @@ def run(type_sffx:str, override_neg:None|str = None):
         fullexpr = f"new E{rettype.suffix}({_convert(mathtype, rettype, tempexpr)})"
         # region start
         o.print(f"#region {desc}")
-        o.print(f"")
+        o.print()
         # header
         o.print(f"/// <summary>{desc}</summary>")
         o.print(f"/// <param name=\"input\">Input</param>")
@@ -212,54 +249,54 @@ def run(type_sffx:str, override_neg:None|str = None):
         o.indent_dec()
         o.print(f"}}")
         # region end
-        o.print(f"")
+        o.print()
         o.print(f"#endregion")
     #endregion
     o = help.Outputter()
     type = _get_type(type_sffx)
     o.print(f"using System;")
-    o.print(f"")
+    o.print()
     o.print(f"#pragma warning disable IDE0047")
-    o.print(f"")
+    o.print()
     o.print(f"namespace aaasm.engine.lxpr")
     o.print(f"{{")
     _header()
     o.print(f"    {{")
     o.indent = 2
     _binary("Add", "Addition", "(<VALUE_A> + <VALUE_B>)")
-    o.print(f"")
+    o.print()
     _binary("Sub", "Subtraction", "(<VALUE_A> - <VALUE_B>)")
-    o.print(f"")
+    o.print()
     _binary("Mul", "Multiplication", "(<VALUE_A> * <VALUE_B>)")
-    o.print(f"")
+    o.print()
     _binary("Div", "Division", "(<VALUE_A> / <VALUE_B>)", div = True)
-    o.print(f"")
+    o.print()
     _binary("Mod", "Modulus", "(<VALUE_A> % <VALUE_B>)", div = True)
-    o.print(f"")
+    o.print()
     _negation("Neg", "Negation", "(-<VALUE>)", override = override_neg)
     if type.kind != _TypeKind.FLOAT:
-        o.print(f"")
+        o.print()
         _binary("BitAnd", "Bitwise-AND", "(<VALUE_A> & <VALUE_B>)", no_float = True)
-        o.print(f"")
+        o.print()
         _binary("BitOr", "Bitwise-OR", "(<VALUE_A> | <VALUE_B>)", no_float = True)
-        o.print(f"")
+        o.print()
         _binary("BitXor", "Bitwise-XOR", "(<VALUE_A> ^ <VALUE_B>)", no_float = True)
-        o.print(f"")
+        o.print()
         _unary("BitNot", "Bitwise-NOT", "(~<VALUE>)")
-        o.print(f"")
-        _binary("ShiftL", "Left-Shift", "(<VALUE_A> << <VALUE_B>)", no_float = True, shift = True)
-        o.print(f"")
-        _binary("ShiftR", "Signed right-Shift", "(<VALUE_A> >> <VALUE_B>)", no_float = True, shift = True)
-        o.print(f"")
-        _binary("ShiftRU", "Unsigned right-Shift", "(<VALUE_A> >>> <VALUE_B>)", no_float = True, shift = True)
+        o.print()
+        _shift("ShiftL", "Left-Shift", "(<VALUE_A> << <VALUE_B>)")
+        o.print()
+        _shift("ShiftR", "Signed right-Shift", "(<VALUE_A> >> <VALUE_B>)")
+        o.print()
+        _shift("ShiftRU", "Unsigned right-Shift", "(<VALUE_A> >>> <VALUE_B>)", unsigned = True)
         if type.numbytes == 2:
-            o.print(f"")
+            o.print()
             _bytelh("ByteLo", "Lo-byte", "(<VALUE> & 0xFF)")
-            o.print(f"")
+            o.print()
             _bytelh("ByteHi", "Hi-byte", "((<VALUE> >> 8) & 0xFF)")
     o.indent = 0
     o.print(f"    }}")
     o.print(f"}}")
-    o.print(f"")
+    o.print()
     o.print(f"#pragma warning restore IDE0047")
-    o.print(f"")
+    o.print()

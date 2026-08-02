@@ -10,10 +10,35 @@ namespace aaasm.cpu.mos6502
         static Rules()
         {
             LexRulesInit lex = new();
-            lex.RoughSymbols = new(from s in (
-                (from c in "()[]#,+-*/&|^~<>!" select c.ToString())
-                .Concat(["<<", ">>", "!=", "==", "<=", ">=", "&&", "||"])
-                ) select (CIStr)s);
+            lex.RoughPatterns = new([
+                new LexRoughStrPattern((CIStr)"@", newlineOnly: true, dontSplit: true),
+                new LexRoughStrPattern((CIStr)"!", newlineOnly: true, dontSplit: true),
+                new LexRoughStrPattern((CIStr)">>>"),
+                new LexRoughStrPattern((CIStr)"<<"),
+                new LexRoughStrPattern((CIStr)">>"),
+                new LexRoughStrPattern((CIStr)"!="),
+                new LexRoughStrPattern((CIStr)"=="),
+                new LexRoughStrPattern((CIStr)"<="),
+                new LexRoughStrPattern((CIStr)">="),
+                new LexRoughStrPattern((CIStr)"&&"),
+                new LexRoughStrPattern((CIStr)"||"),
+                new LexRoughStrPattern((CIStr)"("),
+                new LexRoughStrPattern((CIStr)")"),
+                new LexRoughStrPattern((CIStr)"["),
+                new LexRoughStrPattern((CIStr)"]"),
+                new LexRoughStrPattern((CIStr)"#"),
+                new LexRoughStrPattern((CIStr)","),
+                new LexRoughStrPattern((CIStr)"+"),
+                new LexRoughStrPattern((CIStr)"-"),
+                new LexRoughStrPattern((CIStr)"*"),
+                new LexRoughStrPattern((CIStr)"/"),
+                new LexRoughStrPattern((CIStr)"&"),
+                new LexRoughStrPattern((CIStr)"|"),
+                new LexRoughStrPattern((CIStr)"^"),
+                new LexRoughStrPattern((CIStr)"~"),
+                new LexRoughStrPattern((CIStr)"<"),
+                new LexRoughStrPattern((CIStr)">"),
+                new LexRoughStrPattern((CIStr)"!")]);
             lex.Expression.Literals.DefaultDecimal = ExprIntType.U8;
             lex.Expression.Literals.CharType = ExprIntType.U8;
             lex.Expression.Literals.Hex = new([

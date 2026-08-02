@@ -1864,187 +1864,26 @@ namespace aaasm.engine.lxpr
         #region Left-Shift
 
         /// <summary>Left-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
+        /// <param name="input">Input</param>
+        /// <param name="amount">Shift amount</param>
         /// <returns>Result</returns>
         /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
+        ///     <paramref name="input"/> is null
         ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
+        ///     <paramref name="amount"/> is null
         /// </exception>
-        public static IENumber ShiftL(EU64 a, EU8 b)
+        public static IENumber ShiftL(EU64 input, IEInteger amount)
         {
             try
             {
-                var aa = a.ToUlong();
-                var bb = b.ToShift();
-                return new EU64((aa << bb));
+                var _input = input.ToUlong();
+                var _amount = amount.ToShift();
+                return new EU64((_input << _amount));
             }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Left-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftL(EU64 a, EI8 b)
-        {
-            try
-            {
-                var aa = a.ToInt128();
-                var bb = b.ToShift();
-                return new EU64(unchecked((ulong)((aa << bb) & 18446744073709551615)));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Left-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftL(EU64 a, EU16 b)
-        {
-            try
-            {
-                var aa = a.ToUlong();
-                var bb = b.ToShift();
-                return new EU64((aa << bb));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Left-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftL(EU64 a, EI16 b)
-        {
-            try
-            {
-                var aa = a.ToInt128();
-                var bb = b.ToShift();
-                return new EU64(unchecked((ulong)((aa << bb) & 18446744073709551615)));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Left-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftL(EU64 a, EU32 b)
-        {
-            try
-            {
-                var aa = a.ToUlong();
-                var bb = b.ToShift();
-                return new EU64((aa << bb));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Left-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftL(EU64 a, EI32 b)
-        {
-            try
-            {
-                var aa = a.ToInt128();
-                var bb = b.ToShift();
-                return new EU64(unchecked((ulong)((aa << bb) & 18446744073709551615)));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Left-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftL(EU64 a, EU64 b)
-        {
-            try
-            {
-                var aa = a.ToUlong();
-                var bb = b.ToShift();
-                return new EU64((aa << bb));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Left-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftL(EU64 a, EI64 b)
-        {
-            try
-            {
-                var aa = a.ToInt128();
-                var bb = b.ToShift();
-                return new EU64(unchecked((ulong)((aa << bb) & 18446744073709551615)));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
+            catch when (input is null)
+            { throw new ArgumentNullException(nameof(input)); }
+            catch when (amount is null)
+            { throw new ArgumentNullException(nameof(amount)); }
         }
 
         #endregion
@@ -2052,187 +1891,26 @@ namespace aaasm.engine.lxpr
         #region Signed right-Shift
 
         /// <summary>Signed right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
+        /// <param name="input">Input</param>
+        /// <param name="amount">Shift amount</param>
         /// <returns>Result</returns>
         /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
+        ///     <paramref name="input"/> is null
         ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
+        ///     <paramref name="amount"/> is null
         /// </exception>
-        public static IENumber ShiftR(EU64 a, EU8 b)
+        public static IENumber ShiftR(EU64 input, IEInteger amount)
         {
             try
             {
-                var aa = a.ToUlong();
-                var bb = b.ToShift();
-                return new EU64((aa >> bb));
+                var _input = input.ToUlong();
+                var _amount = amount.ToShift();
+                return new EU64((_input >> _amount));
             }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Signed right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftR(EU64 a, EI8 b)
-        {
-            try
-            {
-                var aa = a.ToInt128();
-                var bb = b.ToShift();
-                return new EU64(unchecked((ulong)((aa >> bb) & 18446744073709551615)));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Signed right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftR(EU64 a, EU16 b)
-        {
-            try
-            {
-                var aa = a.ToUlong();
-                var bb = b.ToShift();
-                return new EU64((aa >> bb));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Signed right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftR(EU64 a, EI16 b)
-        {
-            try
-            {
-                var aa = a.ToInt128();
-                var bb = b.ToShift();
-                return new EU64(unchecked((ulong)((aa >> bb) & 18446744073709551615)));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Signed right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftR(EU64 a, EU32 b)
-        {
-            try
-            {
-                var aa = a.ToUlong();
-                var bb = b.ToShift();
-                return new EU64((aa >> bb));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Signed right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftR(EU64 a, EI32 b)
-        {
-            try
-            {
-                var aa = a.ToInt128();
-                var bb = b.ToShift();
-                return new EU64(unchecked((ulong)((aa >> bb) & 18446744073709551615)));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Signed right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftR(EU64 a, EU64 b)
-        {
-            try
-            {
-                var aa = a.ToUlong();
-                var bb = b.ToShift();
-                return new EU64((aa >> bb));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Signed right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftR(EU64 a, EI64 b)
-        {
-            try
-            {
-                var aa = a.ToInt128();
-                var bb = b.ToShift();
-                return new EU64(unchecked((ulong)((aa >> bb) & 18446744073709551615)));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
+            catch when (input is null)
+            { throw new ArgumentNullException(nameof(input)); }
+            catch when (amount is null)
+            { throw new ArgumentNullException(nameof(amount)); }
         }
 
         #endregion
@@ -2240,187 +1918,26 @@ namespace aaasm.engine.lxpr
         #region Unsigned right-Shift
 
         /// <summary>Unsigned right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
+        /// <param name="input">Input</param>
+        /// <param name="amount">Shift amount</param>
         /// <returns>Result</returns>
         /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
+        ///     <paramref name="input"/> is null
         ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
+        ///     <paramref name="amount"/> is null
         /// </exception>
-        public static IENumber ShiftRU(EU64 a, EU8 b)
+        public static IENumber ShiftRU(EU64 input, IEInteger amount)
         {
             try
             {
-                var aa = a.ToUlong();
-                var bb = b.ToShift();
-                return new EU64((aa >>> bb));
+                var _input = input.ToUlong();
+                var _amount = amount.ToShift();
+                return new EU64((_input >>> _amount));
             }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Unsigned right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftRU(EU64 a, EI8 b)
-        {
-            try
-            {
-                var aa = a.ToInt128();
-                var bb = b.ToShift();
-                return new EU64(unchecked((ulong)((aa >>> bb) & 18446744073709551615)));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Unsigned right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftRU(EU64 a, EU16 b)
-        {
-            try
-            {
-                var aa = a.ToUlong();
-                var bb = b.ToShift();
-                return new EU64((aa >>> bb));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Unsigned right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftRU(EU64 a, EI16 b)
-        {
-            try
-            {
-                var aa = a.ToInt128();
-                var bb = b.ToShift();
-                return new EU64(unchecked((ulong)((aa >>> bb) & 18446744073709551615)));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Unsigned right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftRU(EU64 a, EU32 b)
-        {
-            try
-            {
-                var aa = a.ToUlong();
-                var bb = b.ToShift();
-                return new EU64((aa >>> bb));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Unsigned right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftRU(EU64 a, EI32 b)
-        {
-            try
-            {
-                var aa = a.ToInt128();
-                var bb = b.ToShift();
-                return new EU64(unchecked((ulong)((aa >>> bb) & 18446744073709551615)));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Unsigned right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftRU(EU64 a, EU64 b)
-        {
-            try
-            {
-                var aa = a.ToUlong();
-                var bb = b.ToShift();
-                return new EU64((aa >>> bb));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
-        }
-
-        /// <summary>Unsigned right-Shift</summary>
-        /// <param name="a">Input A</param>
-        /// <param name="b">Input B</param>
-        /// <returns>Result</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="a"/> is null
-        ///     <br/>or<br/>
-        ///     <paramref name="b"/> is null
-        /// </exception>
-        public static IENumber ShiftRU(EU64 a, EI64 b)
-        {
-            try
-            {
-                var aa = a.ToInt128();
-                var bb = b.ToShift();
-                return new EU64(unchecked((ulong)((aa >>> bb) & 18446744073709551615)));
-            }
-            catch when (a is null)
-            { throw new ArgumentNullException(nameof(a)); }
-            catch when (b is null)
-            { throw new ArgumentNullException(nameof(b)); }
+            catch when (input is null)
+            { throw new ArgumentNullException(nameof(input)); }
+            catch when (amount is null)
+            { throw new ArgumentNullException(nameof(amount)); }
         }
 
         #endregion

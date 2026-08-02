@@ -222,16 +222,16 @@ namespace aaasm.engine.lxpr
 
         #region helper methods
 
-        private static EType MM_ReturnEU8(ExprRules rules, ENodeValueType input00) => EType.U8;
-        private static EType MM_ReturnEU64(ExprRules rules, ENodeValueType input00) => EType.U64;
-        private static EType MM_ReturnEI16(ExprRules rules, ENodeValueType input00) => EType.I16;
-        private static EType MM_ReturnEI8(ExprRules rules, ENodeValueType input00) => EType.I8;
-        private static EType MM_ReturnEI32(ExprRules rules, ENodeValueType input00) => EType.I32;
         private static EType MM_ReturnEF32(ExprRules rules, ENodeValueType input00) => EType.F32;
-        private static EType MM_ReturnEF64(ExprRules rules, ENodeValueType input00) => EType.F64;
+        private static EType MM_ReturnEU8(ExprRules rules, ENodeValueType input00) => EType.U8;
         private static EType MM_ReturnEU16(ExprRules rules, ENodeValueType input00) => EType.U16;
+        private static EType MM_ReturnEI32(ExprRules rules, ENodeValueType input00) => EType.I32;
+        private static EType MM_ReturnEU64(ExprRules rules, ENodeValueType input00) => EType.U64;
         private static EType MM_ReturnEI64(ExprRules rules, ENodeValueType input00) => EType.I64;
+        private static EType MM_ReturnEI8(ExprRules rules, ENodeValueType input00) => EType.I8;
         private static EType MM_ReturnEU32(ExprRules rules, ENodeValueType input00) => EType.U32;
+        private static EType MM_ReturnEF64(ExprRules rules, ENodeValueType input00) => EType.F64;
+        private static EType MM_ReturnEI16(ExprRules rules, ENodeValueType input00) => EType.I16;
 
         #endregion
     }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using aaasm.engine.col;
-
+using aaasm.engine.data;
 using RoughTokenSpan = aaasm.engine.col.ImmNullArray<aaasm.engine.lxpr.RoughToken>;
 
 namespace aaasm.engine.lxpr
@@ -291,6 +291,7 @@ namespace aaasm.engine.lxpr
                 foreach (var revLine in ColUtil.ReverseLoop(f_RevLines))
                 {
                     List<RoughToken> line = [];
+                    var lineStart = true;
                     foreach (var input in ColUtil.ReverseLoop(revLine!))
                     {
                         if (input is InterToken inter)
@@ -305,22 +306,32 @@ namespace aaasm.engine.lxpr
                             }
                             while (pos < inter.RawData.Length)
                             {
-                                // Is there a symbol here?
-                                int symbolLen = 0;
-                                foreach (var symbol in f_Rules.RoughSymbols)
+                                Str raw = inter.RawData.Raw;
+                                // Is there a pattern here?
+                                LexRoughPattern? pattern = null;
+                                int patternLen = 0;
+                                foreach (var p in f_Rules.RoughPatterns)
                                 {
-                                    // Only consider symbol if it's larger than the current match
-                                    if (symbol.Length <= symbolLen)
+                                    if (p.NewlineOnly && ((!lineStart) || (pos > 0)))
                                         continue;
-                                    // Does the symbol match?
-                                    if (inter.RawData.Raw.SubstrAt(symbol, pos))
-                                        symbolLen = symbol.Length;
+                                    var len = p.MatchAt(raw, pos);
+                                    if (len == 0) continue;
+                                    pattern = p;
+                                    patternLen = len;
+                                    break;
                                 }
-                                if (symbolLen > 0)
+                                if (pattern is not null)
                                 {
-                                    addToken();
-                                    pos += symbolLen;
-                                    addToken();
+                                    if (pattern.DontSplit)
+                                    {
+                                        pos += patternLen;
+                                    }
+                                    else
+                                    {
+                                        addToken();
+                                        pos += patternLen;
+                                        addToken();
+                                    }
                                     continue;
                                 }
                                 // No!
@@ -332,6 +343,7 @@ namespace aaasm.engine.lxpr
                         {
                             line.Add((RoughToken)input!);
                         }
+                        lineStart = false;
                     }
                     f_Lines.Add(new(line));
                 }

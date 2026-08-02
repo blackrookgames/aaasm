@@ -44,6 +44,17 @@ def run(type_sffx:str):
         o.print(f"    if ({method_id.upper()}_OPS.TryGetValue(other, out var op)) return op;")
         o.print(f"    throw MM_Cannot{method_id}(other);")
         o.print(f"}}")
+    def _method_shift(method_id:str):
+        nonlocal o
+        o.print(f"/// <inheritdoc/>")
+        o.print(f"public override ETypeBinaryOp {method_id}(EType other)")
+        o.print(f"{{")
+        o.print(f"if (!other.IsInteger()) throw MM_Cannot{method_id}(other);")
+        o.print(f"    return new({type.suffix}, other, {type.suffix},")
+        o.print(f"        (input, amount) => (EValue)EMathUtil.{method_id}(")
+        o.print(f"        (E{type.suffix})MM_ValidateType(input, {type.suffix}),")
+        o.print(f"        (IEInteger)MM_ValidateType(amount, other)));")
+        o.print(f"}}")
     #endregion
     type = _get_type(type_sffx)
     flags = f"ETypeFlags.NUMBER{"" if (type.kind == _TypeKind.FLOAT) else " | ETypeFlags.INTEGER"}"
@@ -118,12 +129,6 @@ def run(type_sffx:str):
         o.print(f"")
         _dict_binary("BitXor", no_float = True)
         o.print(f"")
-        _dict_binary("ShiftL", no_float = True)
-        o.print(f"")
-        _dict_binary("ShiftR", no_float = True)
-        o.print(f"")
-        _dict_binary("ShiftRU", no_float = True)
-        o.print(f"")
 
     o.print(f"#endregion")
 
@@ -175,11 +180,11 @@ def run(type_sffx:str):
         o.print(f"")
         _method_unary("BitNot")
         o.print(f"")
-        _method_binary("ShiftL")
+        _method_shift("ShiftL")
         o.print(f"")
-        _method_binary("ShiftR")
+        _method_shift("ShiftR")
         o.print(f"")
-        _method_binary("ShiftRU")
+        _method_shift("ShiftRU")
         o.print(f"")
         if type.numbytes == 2:
             _method_unary("ByteLo", rettype = "U8")

@@ -14,8 +14,8 @@ namespace aaasm.engine.lxpr
         /// <inheritdoc cref="LexRules.LineContinue"/>
         public Str? LineContinue { get; set; } = (CIStr)"\\";
 
-        /// <inheritdoc cref="LexRules.RoughSymbols"/>
-        public ImmNullArray<Str> RoughSymbols { get; set; } = new();
+        /// <inheritdoc cref="LexRules.RoughPatterns"/>
+        public ImmNullArray<LexRoughPattern> RoughPatterns { get; set; } = new();
 
         /// <inheritdoc cref="LexRules.PrePrefix"/>
         public Str? PrePrefix { get; set; } = (CIStr)"@";

@@ -167,7 +167,7 @@ namespace aaasm.engine.col
         /// <summary>Attempts to find an element that meets the specified criteria</summary>
         /// <param name="collection">Collection to search thru</param>
         /// <param name="criteria">Criteria</param>
-        /// <param name="item">Found item</param>
+        /// <param name="item">First found item</param>
         /// <returns>Whether or not successful</returns>
         /// <exception cref="ArgumentNullException">
         ///     <paramref name="collection"/> is null
@@ -183,7 +183,7 @@ namespace aaasm.engine.col
         /// <summary>Attempts to find an element that meets the specified criteria</summary>
         /// <param name="collection">Collection to search thru</param>
         /// <param name="criteria">Criteria</param>
-        /// <param name="index">Index of found item</param>
+        /// <param name="index">Index of first found item</param>
         /// <returns>Whether or not successful</returns>
         /// <exception cref="ArgumentNullException">
         ///     <paramref name="collection"/> is null

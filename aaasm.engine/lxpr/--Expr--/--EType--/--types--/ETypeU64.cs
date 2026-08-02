@@ -219,63 +219,6 @@ namespace aaasm.engine.lxpr
                 (EValue)EMathUtil.BitXor((EU64)MM_ValidateType(a, U64), (EI64)MM_ValidateType(b, I64)))),
         ]);
 
-        private static readonly ImmNullDict<EType, ETypeBinaryOp> SHIFTL_OPS = new([
-            new(U8, new(U64, U8, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftL((EU64)MM_ValidateType(a, U64), (EU8)MM_ValidateType(b, U8)))),
-            new(I8, new(U64, I8, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftL((EU64)MM_ValidateType(a, U64), (EI8)MM_ValidateType(b, I8)))),
-            new(U16, new(U64, U16, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftL((EU64)MM_ValidateType(a, U64), (EU16)MM_ValidateType(b, U16)))),
-            new(I16, new(U64, I16, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftL((EU64)MM_ValidateType(a, U64), (EI16)MM_ValidateType(b, I16)))),
-            new(U32, new(U64, U32, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftL((EU64)MM_ValidateType(a, U64), (EU32)MM_ValidateType(b, U32)))),
-            new(I32, new(U64, I32, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftL((EU64)MM_ValidateType(a, U64), (EI32)MM_ValidateType(b, I32)))),
-            new(U64, new(U64, U64, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftL((EU64)MM_ValidateType(a, U64), (EU64)MM_ValidateType(b, U64)))),
-            new(I64, new(U64, I64, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftL((EU64)MM_ValidateType(a, U64), (EI64)MM_ValidateType(b, I64)))),
-        ]);
-
-        private static readonly ImmNullDict<EType, ETypeBinaryOp> SHIFTR_OPS = new([
-            new(U8, new(U64, U8, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftR((EU64)MM_ValidateType(a, U64), (EU8)MM_ValidateType(b, U8)))),
-            new(I8, new(U64, I8, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftR((EU64)MM_ValidateType(a, U64), (EI8)MM_ValidateType(b, I8)))),
-            new(U16, new(U64, U16, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftR((EU64)MM_ValidateType(a, U64), (EU16)MM_ValidateType(b, U16)))),
-            new(I16, new(U64, I16, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftR((EU64)MM_ValidateType(a, U64), (EI16)MM_ValidateType(b, I16)))),
-            new(U32, new(U64, U32, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftR((EU64)MM_ValidateType(a, U64), (EU32)MM_ValidateType(b, U32)))),
-            new(I32, new(U64, I32, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftR((EU64)MM_ValidateType(a, U64), (EI32)MM_ValidateType(b, I32)))),
-            new(U64, new(U64, U64, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftR((EU64)MM_ValidateType(a, U64), (EU64)MM_ValidateType(b, U64)))),
-            new(I64, new(U64, I64, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftR((EU64)MM_ValidateType(a, U64), (EI64)MM_ValidateType(b, I64)))),
-        ]);
-
-        private static readonly ImmNullDict<EType, ETypeBinaryOp> SHIFTRU_OPS = new([
-            new(U8, new(U64, U8, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftRU((EU64)MM_ValidateType(a, U64), (EU8)MM_ValidateType(b, U8)))),
-            new(I8, new(U64, I8, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftRU((EU64)MM_ValidateType(a, U64), (EI8)MM_ValidateType(b, I8)))),
-            new(U16, new(U64, U16, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftRU((EU64)MM_ValidateType(a, U64), (EU16)MM_ValidateType(b, U16)))),
-            new(I16, new(U64, I16, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftRU((EU64)MM_ValidateType(a, U64), (EI16)MM_ValidateType(b, I16)))),
-            new(U32, new(U64, U32, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftRU((EU64)MM_ValidateType(a, U64), (EU32)MM_ValidateType(b, U32)))),
-            new(I32, new(U64, I32, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftRU((EU64)MM_ValidateType(a, U64), (EI32)MM_ValidateType(b, I32)))),
-            new(U64, new(U64, U64, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftRU((EU64)MM_ValidateType(a, U64), (EU64)MM_ValidateType(b, U64)))),
-            new(I64, new(U64, I64, U64, (a, b) => 
-                (EValue)EMathUtil.ShiftRU((EU64)MM_ValidateType(a, U64), (EI64)MM_ValidateType(b, I64)))),
-        ]);
-
         #endregion
 
         #region EType
@@ -361,22 +304,31 @@ namespace aaasm.engine.lxpr
         /// <inheritdoc/>
         public override ETypeBinaryOp ShiftL(EType other)
         {
-            if (SHIFTL_OPS.TryGetValue(other, out var op)) return op;
-            throw MM_CannotShiftL(other);
+        if (!other.IsInteger()) throw MM_CannotShiftL(other);
+            return new(U64, other, U64,
+                (input, amount) => (EValue)EMathUtil.ShiftL(
+                (EU64)MM_ValidateType(input, U64),
+                (IEInteger)MM_ValidateType(amount, other)));
         }
 
         /// <inheritdoc/>
         public override ETypeBinaryOp ShiftR(EType other)
         {
-            if (SHIFTR_OPS.TryGetValue(other, out var op)) return op;
-            throw MM_CannotShiftR(other);
+        if (!other.IsInteger()) throw MM_CannotShiftR(other);
+            return new(U64, other, U64,
+                (input, amount) => (EValue)EMathUtil.ShiftR(
+                (EU64)MM_ValidateType(input, U64),
+                (IEInteger)MM_ValidateType(amount, other)));
         }
 
         /// <inheritdoc/>
         public override ETypeBinaryOp ShiftRU(EType other)
         {
-            if (SHIFTRU_OPS.TryGetValue(other, out var op)) return op;
-            throw MM_CannotShiftRU(other);
+        if (!other.IsInteger()) throw MM_CannotShiftRU(other);
+            return new(U64, other, U64,
+                (input, amount) => (EValue)EMathUtil.ShiftRU(
+                (EU64)MM_ValidateType(input, U64),
+                (IEInteger)MM_ValidateType(amount, other)));
         }
 
         #endregion

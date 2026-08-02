@@ -26,8 +26,11 @@ namespace aaasm
 
         public override void Main()
         {
-            ExprRules rules = new(new());
-            Console.WriteLine(rules.IsValidLabelDeclaration(new(label)));
+            LexRoughRegexPattern regex = new(@"\d");
+            Console.WriteLine(regex.MatchAt((Str)"012345", 1));
+            Console.WriteLine(regex.MatchAt((Str)"2A2345", 1));
+            Console.WriteLine(regex.MatchAt((Str)"312345", 1));
+            Console.WriteLine(regex.MatchAt((Str)"a12345", 1));
         }
 
         #endregion

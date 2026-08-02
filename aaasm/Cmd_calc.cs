@@ -22,10 +22,34 @@ namespace aaasm
             LexRulesInit lexRules = new();
             lexRules.Comments = ImmNullArray<LexCommentRules>.EMPTY;
             lexRules.LineContinue = null;
-            lexRules.RoughSymbols = new(from s in (
-                (from c in "()[]#,+-*/%&|^~<>!" select new string(c.ToString()))
-                .Concat(["<<", ">>", ">>>", "!=", "==", "<=", ">=", "&&", "||"])
-                ) select (CIStr)s);
+            lexRules.RoughPatterns = new([
+                new LexRoughStrPattern((CIStr)">>>"),
+                new LexRoughStrPattern((CIStr)"<<"),
+                new LexRoughStrPattern((CIStr)">>"),
+                new LexRoughStrPattern((CIStr)"!="),
+                new LexRoughStrPattern((CIStr)"=="),
+                new LexRoughStrPattern((CIStr)"<="),
+                new LexRoughStrPattern((CIStr)">="),
+                new LexRoughStrPattern((CIStr)"&&"),
+                new LexRoughStrPattern((CIStr)"||"),
+                new LexRoughStrPattern((CIStr)"("),
+                new LexRoughStrPattern((CIStr)")"),
+                new LexRoughStrPattern((CIStr)"["),
+                new LexRoughStrPattern((CIStr)"]"),
+                new LexRoughStrPattern((CIStr)"#"),
+                new LexRoughStrPattern((CIStr)","),
+                new LexRoughStrPattern((CIStr)"+"),
+                new LexRoughStrPattern((CIStr)"-"),
+                new LexRoughStrPattern((CIStr)"*"),
+                new LexRoughStrPattern((CIStr)"/"),
+                new LexRoughStrPattern((CIStr)"%"),
+                new LexRoughStrPattern((CIStr)"&"),
+                new LexRoughStrPattern((CIStr)"|"),
+                new LexRoughStrPattern((CIStr)"^"),
+                new LexRoughStrPattern((CIStr)"~"),
+                new LexRoughStrPattern((CIStr)"<"),
+                new LexRoughStrPattern((CIStr)">"),
+                new LexRoughStrPattern((CIStr)"!")]);
             LEXRULES = new(lexRules);
         }
 
